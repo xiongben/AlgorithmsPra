@@ -32,7 +32,7 @@ public class ArrayQueueDemo {
                 case 'g':
                     try {
                         int res = queue.getQueue();
-                        System.out.printf("提取出元素%d/n",res);
+                        System.out.printf("提取出元素%d\n",res);
 
                     }catch (Exception e){
                         System.out.println(e.getMessage());
@@ -60,8 +60,8 @@ class ArrayQueue{
     private int rear;
     private int[] arr;
 
-    public ArrayQueue(int maxSize){
-        maxSize = maxSize;
+    public ArrayQueue(int num){
+        maxSize = num;
         front = -1;
         rear = -1;
         arr = new int[maxSize];
@@ -76,6 +76,7 @@ class ArrayQueue{
     }
 
     public void addQueue(int num){
+        System.out.println(rear + ";"+front+";"+maxSize);
         if(isFull()){
             System.out.println("队列已经满了哦！");
             return;
