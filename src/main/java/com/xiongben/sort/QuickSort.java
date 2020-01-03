@@ -5,8 +5,38 @@ import java.util.Arrays;
 public class QuickSort {
     public static void main(String[] args) {
         int[] arr = {44,66,78,22,4,5,4,5,5,7,1,9,6,4,5,4,78,34,23,11,65,1,2,3};
-        quickSort(arr,0,arr.length-1);
+        quickSort2(arr,0,arr.length-1);
         System.out.println(Arrays.toString(arr));
+    }
+
+    public static void quickSort2(int[] arr,int left,int right){
+        if(left > right){
+            return;
+        }
+        int l = left;
+        int r = right;
+        int pivot = arr[left];
+        int temp = 0; //临时变量，作为交换时使用
+        while (l != r){
+            while (arr[r] >= pivot && l<r){
+                r -= 1;
+            }
+            while (arr[l] <= pivot && l<r){
+                l += 1;
+            }
+
+            //交换
+            if(l < r){
+                temp = arr[l];
+                arr[l] = arr[r];
+                arr[r] = temp;
+            }
+        }
+        arr[left] = arr[l];
+        arr[l] = pivot;
+        quickSort2(arr,left,l-1);
+        quickSort2(arr,l+1,right);
+        return;
     }
 
     public static void quickSort(int[] arr,int left, int right) {
