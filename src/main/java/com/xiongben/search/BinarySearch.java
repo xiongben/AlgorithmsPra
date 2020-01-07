@@ -16,9 +16,9 @@ public class BinarySearch {
         int mid = (left + right) / 2;
         int midVal = arr[mid];
         if(findVal < midVal){
-            return binarySearch(arr,left,mid,findVal);
+            return binarySearch(arr,left,mid-1,findVal);
         }else if(findVal > midVal){
-            return binarySearch(arr,mid,right,findVal);
+            return binarySearch(arr,mid+1,right,findVal);
         }else {
             return mid;
         }
