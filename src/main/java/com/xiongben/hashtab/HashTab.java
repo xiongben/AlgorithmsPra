@@ -15,6 +15,7 @@ public class HashTab {
             System.out.println("add:  添加雇员");
             System.out.println("list: 显示雇员");
             System.out.println("find: 查找雇员");
+            System.out.println("del: 删除雇员");
             System.out.println("exit: 退出系统");
             key = scanner.next();
             if ("add".equals(key)) {
@@ -32,6 +33,11 @@ public class HashTab {
                 System.out.println("请输入要查找的id");
                 id = scanner.nextInt();
                 hashTab.findEmpById(id);
+            }else if("del".equals(key)){
+                int id;
+                System.out.println("请输入要查找的id");
+                id = scanner.nextInt();
+                hashTab.delete(id);
             } else if ("exit".equals(key)) {
                 scanner.close();
                 System.exit(0);
@@ -55,6 +61,12 @@ class HashTableClass {
     public void add(Emp emp){
         int empLinkedListNo = hashFun(emp.id);
         empLinkedListArray[empLinkedListNo].add(emp);
+    }
+
+    public void delete(int id){
+        int empLinkedListNo = hashFun(id);
+        System.out.println(empLinkedListNo);
+        empLinkedListArray[empLinkedListNo].delete(id);
     }
 
     public void list(){
@@ -90,11 +102,11 @@ class Emp {
 }
 
 class EmpLinkedList {
-    private Emp head;
+    private Emp head = new Emp(-1,null);
 
     public void add(Emp emp){
-        if(head == null){
-            head = emp;
+        if(head.next == null){
+            head.next = emp;
             return;
         }
         Emp empcur = head;
@@ -107,13 +119,45 @@ class EmpLinkedList {
         empcur.next = emp;
     }
 
-    public void list(int no){
-        if(head == null){
-            System.out.println("第 "+(no+1)+" 链表为空");
+    public void delete(int id){
+        if(head.next == null){
+            System.out.println("链表为空,无法删除");
             return;
         }
-        System.out.print("第 "+(no+1)+" 链表的信息为");
         Emp empcur = head;
+        boolean flag = false;
+        while (true){
+            if(empcur.next == null){
+                break;
+            }
+            if(empcur.next.id == id){
+                flag = true;
+                break;
+            }
+            empcur = empcur.next;
+        }
+        if(flag){
+            empcur.next = empcur.next.next;
+        }else{
+            System.out.println("没有找到要删除的元素");
+        }
+//        while (true){
+//            System.out.printf(" => id=%d name=%s\t", empcur.id, empcur.name);
+//            if(empcur.next == null){
+//                break;
+//            }
+//            empcur= empcur.next;
+//        }
+//        System.out.println();
+    }
+
+    public void list(int no){
+        if(head.next == null){
+            System.out.println("第 "+(no)+" 链表为空");
+            return;
+        }
+        System.out.print("第 "+(no)+" 链表的信息为");
+        Emp empcur = head.next;
         while (true){
             System.out.printf(" => id=%d name=%s\t", empcur.id, empcur.name);
             if(empcur.next == null){
@@ -125,11 +169,11 @@ class EmpLinkedList {
     }
 
     public Emp findEmpById(int id){
-        if(head == null){
+        if(head.next == null){
             System.out.println("链表为空");
             return null;
         }
-        Emp empcur = head;
+        Emp empcur = head.next;
         while (true){
             if(empcur.id == id){
                 break;
