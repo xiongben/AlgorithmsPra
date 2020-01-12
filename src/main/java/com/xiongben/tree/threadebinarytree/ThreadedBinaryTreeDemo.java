@@ -65,5 +65,5 @@ class HeroNode {
     public void setRightType(int rightType) {
         this.rightType = rightType;
     }
-    
+
 }
