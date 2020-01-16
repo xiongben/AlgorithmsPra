@@ -11,6 +11,61 @@ public class HuffmanCode {
         byte[] huffmanCodesBytes= huffmanZip(contentBytes);
         System.out.println("压缩后的结果是:" + Arrays.toString(huffmanCodesBytes) + " 长度= " + huffmanCodesBytes.length);
 
+        byte[] sourceBytes = decode(huffmanCodes, huffmanCodesBytes);
+
+        System.out.println("原来的字符串=" + new String(sourceBytes)); // "i like like like java do you like a java"
+
+    }
+
+    private static byte[] decode(Map<Byte,String> huffmanCodes,byte[] huffmanBytes){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i=0;i<huffmanBytes.length;i++){
+            byte b = huffmanBytes[i];
+            boolean flag = (i == huffmanBytes.length-1);
+            stringBuilder.append(byteToBitString(!flag,b));
+        }
+
+        Map<String,Byte> map = new HashMap<String, Byte>();
+        for (Map.Entry<Byte,String> entry:huffmanCodes.entrySet() ){
+            map.put(entry.getValue(),entry.getKey());
+        }
+
+        List<Byte> list = new ArrayList<Byte>();
+        for (int i=0;i<stringBuilder.length();){
+            int count = 1;
+            boolean flag = true;
+            Byte b = null;
+
+            while (flag){
+                String key = stringBuilder.substring(i,i+count);
+                b = map.get(key);
+                if(b == null){
+                    count++;
+                }else {
+                    flag = false;
+                }
+            }
+            list.add(b);
+            i += count;
+        }
+        byte b[] = new byte[list.size()];
+        for (int i=0;i<b.length;i++){
+            b[i] = list.get(i);
+        }
+        return b;
+    }
+
+    private static String byteToBitString(boolean flag,byte b){
+        int temp = b;
+        if(flag){
+            temp |= 256;
+        }
+        String str = Integer.toBinaryString(temp);
+        if(flag){
+            return str.substring(str.length()-8);
+        }else{
+            return str;
+        }
     }
 
     private static byte[] huffmanZip(byte[] bytes){
