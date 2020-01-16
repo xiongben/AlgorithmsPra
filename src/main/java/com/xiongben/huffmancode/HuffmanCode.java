@@ -4,12 +4,68 @@ import java.util.*;
 
 public class HuffmanCode {
     public static void main(String[] args) {
+        String content = "i like like like java do you like a java";
+        byte[] contentBytes = content.getBytes();
+        System.out.println(contentBytes.length); //40
 
+        byte[] huffmanCodesBytes= huffmanZip(contentBytes);
+        System.out.println("压缩后的结果是:" + Arrays.toString(huffmanCodesBytes) + " 长度= " + huffmanCodesBytes.length);
+
+    }
+
+    private static byte[] huffmanZip(byte[] bytes){
+        List<Node> nodes = getNodes(bytes);
+        Node huffmanTreeRoot = createHuffmanTree(nodes);
+        Map<Byte, String> huffmanCodes = getCodes(huffmanTreeRoot);
+        byte[] huffmanCodeBytes = zip(bytes,huffmanCodes);
+        return huffmanCodeBytes;
+    }
+
+    /**
+     *
+     * @param bytes  原始字符串对应的byte[]
+     * @param huffmanCodes
+     * @return 返回赫夫曼编码处理后的byte[]
+     */
+    private static byte[] zip(byte[] bytes,Map<Byte,String> huffmanCodes){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (byte b : bytes){
+            stringBuilder.append(huffmanCodes.get(b));
+        }
+        int len;
+        if(stringBuilder.length()%8 == 0){
+            len = stringBuilder.length()/8;
+        }else{
+            len = stringBuilder.length()/8 + 1;
+        }
+        byte[] huffmanCodeBytes = new byte[len];
+        int index = 0;
+        for (int i=0;i<stringBuilder.length();i+=8){
+            String strByte;
+            if(i+8 > stringBuilder.length()){
+                strByte = stringBuilder.substring(i);
+            }else{
+                strByte = stringBuilder.substring(i,i+8);
+            }
+            huffmanCodeBytes[index] = (byte)Integer.parseInt(strByte,2);
+            index++;
+        }
+        return huffmanCodeBytes;
     }
 
     //生成霍夫曼树对应的霍夫曼编码
     static Map<Byte, String> huffmanCodes = new HashMap<Byte, String>();
     static StringBuilder stringBuilder = new StringBuilder();
+
+    //重写方法
+    private static Map<Byte, String> getCodes(Node root){
+        if(root == null){
+            return null;
+        }
+        getCodes(root.left,"0",stringBuilder);
+        getCodes(root.right,"1",stringBuilder);
+        return huffmanCodes;
+    }
 
     /**
      *
