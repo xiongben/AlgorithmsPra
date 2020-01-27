@@ -66,7 +66,7 @@ public class GreedyAlgorithm {
             if(maxKey != null){
                 selects.add(maxKey);
                 allAreas.removeAll(broadcasts.get(maxKey));
-                //warn it 
+                //warn it
                 for (String key:broadcasts.keySet()){
                     HashSet<String> areas = broadcasts.get(key);
                     areas.removeAll(broadcasts.get(maxKey));
