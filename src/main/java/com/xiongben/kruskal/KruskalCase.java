@@ -21,6 +21,88 @@ public class KruskalCase {
                 /*G*/ {  14, INF, INF, INF,   8,   9,   0}};
 
     }
+
+    public KruskalCase(char[] vertexs,int[][] matrix){
+        int vlen = vertexs.length;
+        this.vertexs = new char[vlen];
+        this.vertexs = vertexs;
+        this.matrix = matrix;
+        //统计边的个数
+        for (int i=0;i<vlen;i++){
+            for (int j=i+1;j<vlen;j++){
+                if(this.matrix[i][j] != INF){
+                    this.edgeNum++;
+                }
+            }
+        }
+    }
+
+    public void kruskal() {
+
+    }
+
+    public void print(){
+        System.out.println("邻接矩阵为：\n");
+        for (int i=0;i<vertexs.length;i++){
+            for (int j=0;j<vertexs.length;j++){
+                System.out.printf("%12d",matrix[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
+    //对边进行冒泡排序
+    public void sortEdges(EData[] edges){
+        for (int i=0;i<edges.length-1;i++){
+            for (int j=0;j<edges.length-i-1;j++){
+                if(edges[j].weight > edges[j+1].weight){
+                    EData tmp = edges[j];
+                    edges[j] = edges[j+1];
+                    edges[j+1] = tmp;
+                }
+            }
+        }
+    }
+
+    //获取顶点对应的下标
+    private int getPosition(char ch) {
+        for (int i=0;i<vertexs.length;i++){
+            if(vertexs[i] == ch){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 获取图中边的数组
+     * @return
+     */
+    private EData[] getEdges() {
+        int index = 0;
+        EData[] edges = new EData[edgeNum];
+        for (int i=0;i<vertexs.length;i++){
+            for (int j=i+1;j<vertexs.length;j++){
+                if(matrix[i][j] != INF){
+                    edges[index++] = new EData(vertexs[i],vertexs[j],matrix[i][j]);
+                }
+            }
+        }
+        return edges;
+    }
+
+    /**
+     * 获取下标为i的顶点的终点，用于判断两个顶点的终点是否相同，即是否构成环路
+     * @param ends 各个顶点的终点数组
+     * @param i 对应顶点的下标
+     * @return
+     */
+    private int getEnd(int[] ends,int i){
+        while (ends[i] != 0){
+            i = ends[i];
+        }
+        return i;
+    }
 }
 
 
