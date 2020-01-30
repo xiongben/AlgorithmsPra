@@ -1,5 +1,7 @@
 package com.xiongben.kruskal;
 
+import java.util.Arrays;
+
 public class KruskalCase {
 
     private int edgeNum; //边个数
@@ -19,6 +21,9 @@ public class KruskalCase {
                 /*E*/ { INF, INF,   5,   4,   0,   2,   8},
                 /*F*/ {  16,   7,   6, INF,   2,   0,   9},
                 /*G*/ {  14, INF, INF, INF,   8,   9,   0}};
+        KruskalCase kruskalCase = new KruskalCase(vertexs,matrix);
+        kruskalCase.print();
+        kruskalCase.kruskal();
 
     }
 
@@ -38,6 +43,29 @@ public class KruskalCase {
     }
 
     public void kruskal() {
+        int index = 0; //最后结果数组的索引
+        int[] ends = new int[edgeNum]; //每个顶点的终点数组
+        EData[] rets = new EData[edgeNum]; //用于保存最小生成树
+
+        EData[] edges = getEdges();
+        System.out.println("图的边的集合=" + Arrays.toString(edges) + " 共"+ edges.length); //12
+        sortEdges(edges);
+
+        for (int i=0;i<edgeNum;i++){
+            int p1 = getPosition(edges[i].start);
+            int p2 = getPosition(edges[i].end);
+            int m = getEnd(ends,p1);
+            int n = getEnd(ends,p2);
+            if(m != n){ //不构成回路
+                ends[m] = n;
+                rets[index++] = edges[i];
+            }
+        }
+
+        System.out.println("最小生成树为：");
+        for (int i=0;i<index;i++){
+            System.out.println(rets[i]);
+        }
 
     }
 
